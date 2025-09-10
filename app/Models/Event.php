@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
@@ -15,7 +15,7 @@ class Event extends Model
         'location',
         'capacity',
     ];
-protected $cast=[
+protected $casts=[
     'starts_at'=>'datetime',
 ];
 // reltaionships, event that can belong to an organiser
