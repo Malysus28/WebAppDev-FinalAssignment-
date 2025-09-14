@@ -15,6 +15,7 @@
 
 </head>
 <body>
+@include('navbar')
 
   <div class="container py-4" style="max-width: 900px;">
     <div class="card shadow-sm">
@@ -34,6 +35,21 @@
         <div class="fw-semibold mb-3">
           Capacity: {{ $event->capacity }} · Booked: {{ $event->bookings_count ?? 0 }} · Available: {{ $available }}
         </div>
+
+        <div class="d-flex gap-2 mt-3">
+  @can('update', $event)
+    <a href="{{ route('events.edit', $event) }}" class="btn btn-outline-primary btn-sm">Edit</a>
+  @endcan
+
+  @can('delete', $event)
+    <form method="POST" action="{{ route('events.destroy', $event) }}" class="d-inline"
+          onsubmit="return confirm('Delete this event?')">
+      @csrf @method('DELETE')
+      <button class="btn btn-danger btn-sm">Delete</button>
+    </form>
+  @endcan
+</div>
+
 
         <div class="d-flex gap-2">
           <button class="btn btn-success" disabled>Book this event</button>
