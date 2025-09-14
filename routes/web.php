@@ -16,21 +16,29 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
+    // profile 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+// booking attendees 
      Route::post('/events/{event}/book', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+
+    // orgqniaser 
+     Route::get('/organiser/events', [EventController::class, 'manage'])->name('organiser.events.manage');                
+    Route::post('/organiser/events', [EventController::class, 'store'])->name('organiser.events.store');
+    Route::get('/organiser/events/{event}/edit', [EventController::class, 'edit'])->name('organiser.events.edit');
+    Route::put('/organiser/events/{event}', [EventController::class, 'update'])->name('organiser.events.update');
+    Route::delete('/organiser/events/{event}', [EventController::class, 'destroy'])->name('organiser.events.destroy');
+
+// Backwards-compatible redirect for old link
+Route::get('/events/create', fn () => redirect()->route('organiser.events.manage'))
+    ->name('events.create');
+
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
-    Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
-    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
-});
+
 
 require __DIR__.'/auth.php';

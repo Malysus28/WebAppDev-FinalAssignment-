@@ -1,63 +1,67 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><title>Edit Event</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <meta charset="utf-8">
+  <title>Edit Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  @includeIf('navbar')
-  <div class="container py-4" style="max-width:800px;">
-    <h1 class="h4 mb-3">Edit Event</h1>
+  @include('navbar')
 
-    <form method="POST" action="{{ route('events.update', $event) }}" class="vstack gap-3">
-      @csrf @method('PUT')
+  <main class="container py-4">
+    <h1 class="mb-4">Edit Event</h1>
 
-      <div>
-        <label class="form-label">Title</label>
-        <input name="title" class="form-control" maxlength="100" required value="{{ old('title', $event->title) }}">
-        @error('title')<div class="text-danger small">{{ $message }}</div>@enderror
+    @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
+    @if(session('error'))   <div class="alert alert-danger">{{ session('error') }}</div> @endif
+    @if($errors->any())
+      <div class="alert alert-danger"><ul class="mb-0">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul></div>
+    @endif
+
+    <form method="POST" action="{{ route('organiser.events.update', $event) }}" class="row g-3">
+      @csrf
+      @method('PUT') 
+
+      <div class="col-12">
+        <label class="form-label">Title *</label>
+        <input type="text" name="title" value="{{ old('title', $event->title) }}" maxlength="100" required
+               class="form-control @error('title') is-invalid @enderror">
+        @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div>
+      <div class="col-12">
         <label class="form-label">Description</label>
-        <textarea name="description" class="form-control" rows="4">{{ old('description', $event->description) }}</textarea>
+        <textarea name="description" rows="3" class="form-control @error('description') is-invalid @enderror">{{ old('description', $event->description) }}</textarea>
+        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Date & Time</label>
-          <input name="starts_at" type="datetime-local" class="form-control" required
-                 value="{{ old('starts_at', $event->starts_at->format('Y-m-d\TH:i')) }}">
-          @error('starts_at')<div class="text-danger small">{{ $message }}</div>@enderror
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Capacity</label>
-          <input name="capacity" type="number" min="1" max="1000" class="form-control" required
-                 value="{{ old('capacity', $event->capacity) }}">
-          @error('capacity')<div class="text-danger small">{{ $message }}</div>@enderror
-        </div>
+      <div class="col-md-4">
+        <label class="form-label">Date &amp; Time *</label>
+        <input type="datetime-local" name="starts_at"
+               value="{{ old('starts_at', optional($event->starts_at)->format('Y-m-d\TH:i')) }}"
+               required class="form-control @error('starts_at') is-invalid @enderror">
+        @error('starts_at')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div>
-        <label class="form-label">Location</label>
-        <input name="location" class="form-control" maxlength="255" required value="{{ old('location', $event->location) }}">
-        @error('location')<div class="text-danger small">{{ $message }}</div>@enderror
+      <div class="col-md-4">
+        <label class="form-label">Location *</label>
+        <input type="text" name="location" value="{{ old('location', $event->location) }}" maxlength="255" required
+               class="form-control @error('location') is-invalid @enderror">
+        @error('location')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div class="d-flex gap-2 align-items-center">
-        <a href="{{ route('events.show', $event) }}" class="btn btn-outline-secondary">Cancel</a>
+      <div class="col-md-4">
+        <label class="form-label">Capacity *</label>
+        <input type="number" name="capacity" min="1" max="1000" value="{{ old('capacity', $event->capacity) }}" required
+               class="form-control @error('capacity') is-invalid @enderror">
+        @error('capacity')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+
+      <div class="col-12 d-flex gap-2">
         <button class="btn btn-primary">Save changes</button>
-
-        @can('delete', $event)
-          <form method="POST" action="{{ route('events.destroy', $event) }}" class="ms-auto"
-                onsubmit="return confirm('Delete this event?')">
-            @csrf @method('DELETE')
-            <button class="btn btn-danger">Delete</button>
-          </form>
-        @endcan
+        <a href="{{ route('organiser.events.manage') }}" class="btn btn-outline-secondary">Cancel</a>
       </div>
     </form>
-  </div>
+  </main>
 </body>
 </html>

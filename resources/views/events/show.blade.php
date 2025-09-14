@@ -37,17 +37,29 @@
         </div>
 
         <div class="d-flex gap-2 mt-3">
-  @can('update', $event)
-    <a href="{{ route('events.edit', $event) }}" class="btn btn-outline-primary btn-sm">Edit</a>
-  @endcan
 
-  @can('delete', $event)
-    <form method="POST" action="{{ route('events.destroy', $event) }}" class="d-inline"
-          onsubmit="return confirm('Delete this event?')">
-      @csrf @method('DELETE')
-      <button class="btn btn-danger btn-sm">Delete</button>
-    </form>
-  @endcan
+  <div class="d-flex gap-2 mt-3">
+          @auth
+            @if(auth()->id() === $event->organiser_id) {{-- Only show if logged-in user is the event organiser --}}
+              <a href="{{ route('organiser.events.edit', $event) }}" class="btn btn-outline-primary btn-sm">
+                Edit
+              </a>
+
+              @if(($event->bookings_count ?? $event->bookings->count() ?? 0) == 0)
+                <form method="POST" action="{{ route('organiser.events.destroy', $event) }}" class="d-inline"
+                      onsubmit="return confirm('Delete this event?')">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              @else
+                <button class="btn btn-danger btn-sm" disabled title="This event has bookings and cannot be deleted.">
+                  Delete
+                </button>
+              @endif
+            @endif
+          @endauth
+        </div>
 </div>
 
 

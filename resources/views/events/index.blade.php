@@ -12,13 +12,12 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   />
+  <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
 </head>
 <body>
     @include('navbar')
   <div class="container py-4">
-    <header class="d-flex justify-content-between align-items-center mb-3">
-      <div class="fs-4 fw-bold">Event Finder</div>
-    </header>
 
     <h1 class="display-6 mb-3">Upcoming Events</h1>
 
@@ -45,7 +44,7 @@
 
               {{-- Push the button to the bottom --}}
               <div class="mt-auto pt-2">
-                <a class="btn btn-primary btn-sm w-100" href="{{ route('events.show', $event) }}">
+                <a class="btn btn-outline-success info btn-sm w-100" href="{{ route('events.show', $event) }}" >
                   View details
                 </a>
               </div>
@@ -64,6 +63,12 @@
       {{ $events->links('pagination::bootstrap-5') }}
     </div>
   </div>
+{{-- EDIT: Bootstrap JS bundle for navbar toggle --}}
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
 
 </body>
 </html>

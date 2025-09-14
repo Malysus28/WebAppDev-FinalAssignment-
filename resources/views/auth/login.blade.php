@@ -2,9 +2,22 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <form method="POST" action="{{ route('login', ['role' => request('role')]) }}">
+    @csrf
 
+    {{-- Optional banner to reassure the user --}}
+    @if(request('role') === 'organiser')
+      <div class="alert alert-warning mb-3">
+        <strong>Organizer Login:</strong> Please use your organiser email and password.
+      </div>
+    @endif
+        @csrf
+       <!-- if organiser -->
+         @if(request()->query('organiser'))
+  <div class="alert alert-info">
+    Organizer login: please use your organiser credentials.
+  </div>
+@endif
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -31,6 +44,7 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
+ 
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))

@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,6 +28,16 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+               // ✅ If they clicked the "Organizer Login" button (?role=organiser),
+        // make the logged-in user an organiser.
+        if ($request->query('role') === 'organiser') {
+            $user = Auth::user();
+            if ($user && $user->type !== User::TYPE_ORGANISER) {
+                $user->type = User::TYPE_ORGANISER;   // or just 'ORGANISER' if no constant
+                $user->save();
+            }
+        }
 // my experiment
         // return redirect()->intended(route('dashboard', absolute: false));
          return redirect()->intended(route('home'));
