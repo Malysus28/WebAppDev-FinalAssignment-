@@ -55,11 +55,14 @@
           <button class="btn btn-success" disabled>Book this event</button>
         </div>
       </div>
+      <br />
     </div>
-  </div>
-      <div class="mb-3">
+     <br />
+          <div class="mb-3">
       <a href="{{ route('home') }}" class="btn btn-outline-secondary btn-sm">Back to events</a>
     </div>
+
+  </div>
 
 
 </body>
