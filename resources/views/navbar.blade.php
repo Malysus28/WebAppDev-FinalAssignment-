@@ -15,26 +15,36 @@
           </a>
         </li>
 
-        {{-- Optional: show extras depending on role --}}
+        {{-- Role-based items --}}
         @auth
-          @if(auth()->user()->type === \App\Models\User::TYPE_ORGANISER)
-            <li class="nav-item">
-              <a class="nav-link {{ request()->routeIs('events.create') ? 'active' : '' }}" href="{{ route('events.create') }}">
-                Create Event
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                Dashboard
-              </a>
-            </li>
+          @php($user = auth()->user()) {{-- EDIT: cache user & allow null-safe --}}
+          
+          @if($user?->type === \App\Models\User::TYPE_ORGANISER) {{-- EDIT: null-safe --}}
+            @if (Route::has('events.create'))
+              <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('events.create') ? 'active' : '' }}" href="{{ route('events.create') }}">
+                  Create Event
+                </a>
+              </li>
+            @endif
+
+            @if (Route::has('dashboard'))
+              <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                  Dashboard
+                </a>
+              </li>
+            @endif
           @endif
-          @if(auth()->user()->type === \App\Models\User::TYPE_ATTENDEE)
-            <li class="nav-item">
-              <a class="nav-link {{ request()->routeIs('bookings.index') ? 'active' : '' }}" href="{{ route('bookings.index') }}">
-                My Bookings
-              </a>
-            </li>
+
+          @if($user?->type === \App\Models\User::TYPE_ATTENDEE) {{-- EDIT: null-safe --}}
+            @if (Route::has('bookings.index'))
+              <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('bookings.index') ? 'active' : '' }}" href="{{ route('bookings.index') }}">
+                  My Bookings
+                </a>
+              </li>
+            @endif
           @endif
         @endauth
       </ul>

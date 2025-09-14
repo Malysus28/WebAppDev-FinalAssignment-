@@ -7,6 +7,10 @@ use App\Models\Event;
 
 class EventController extends Controller
 {
+    public function __construct()
+{
+    $this->middleware('auth')->except(['index', 'show']);
+}
     public function index(){
         $events=Event::with('organiser')
         ->withCount('bookings')
@@ -79,4 +83,5 @@ public function destroy(Event $event)
 
     return redirect()->route('home')->with('success', 'Event deleted.');
 }
+
 }
