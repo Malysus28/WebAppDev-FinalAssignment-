@@ -5,6 +5,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 
+use App\Http\Controllers\DashboardController;
+
 Route::get('/', [EventController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::view('/privacy-policy', 'privacy')->name('privacy');
@@ -38,7 +40,10 @@ Route::get('/events/create', fn () => redirect()->route('organiser.events.manage
     ->name('events.create');
 
 });
-
+// test
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 require __DIR__.'/auth.php';

@@ -37,4 +37,9 @@ class User extends Authenticatable
     public function bookings(){
         return $this->hasMany(Booking::class, 'attendee_id');
     }
+
+    public function isOrganiser(): bool
+    {
+        return $this->type === self::TYPE_ORGANISER;
+    }
 }
