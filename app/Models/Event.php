@@ -19,7 +19,6 @@ protected $casts=[
     'starts_at'=>'datetime',
 ];
 // reltaionships, event that can belong to an organiser
-
 public function organiser(){
     return $this->belongsTo(User::class,'organiser_id');
 }

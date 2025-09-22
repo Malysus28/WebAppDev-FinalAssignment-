@@ -12,9 +12,9 @@ Route::get('/events/{event}', [EventController::class, 'show'])->name('events.sh
 Route::view('/privacy-policy', 'privacy')->name('privacy');
 Route::view('/terms', 'terms')->name('terms');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::middleware('auth')->group(function () {
@@ -40,10 +40,19 @@ Route::get('/events/create', fn () => redirect()->route('organiser.events.manage
     ->name('events.create');
 
 });
-// test
+//dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+// mybookings page when attendee is logged in 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-bookings', [\App\Http\Controllers\BookingController::class, 'index'])
+        ->name('bookings.index');
+        
+// bookings 
+    Route::post('/events/{event}/book', [\App\Http\Controllers\BookingController::class, 'store'])
+        ->name('bookings.store');
+});
 
 require __DIR__.'/auth.php';

@@ -63,9 +63,42 @@
 </div>
 
 
-        <div class="d-flex gap-2">
-          <button class="btn btn-success" disabled>Book this event</button>
-        </div>
+{{-- Messages (show BOTH validation errors and session flashes) --}}
+@if ($errors->any())
+  <div class="alert alert-danger mt-3">{{ $errors->first() }}</div>
+@endif
+@if (session('error'))
+  <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+@endif
+@if (session('success'))
+  <div class="alert alert-success mt-3">{{ session('success') }}</div>
+@endif
+
+@auth
+  @php
+    // defensive: avoid N+1
+    $bookedCount = $event->bookings_count ?? $event->bookings()->count();
+    $cap = (int)($event->capacity ?? 0);
+    $isFull = $bookedCount >= $cap;
+    $alreadyBooked = $event->bookings()->where('user_id', auth()->id())->exists();
+  @endphp
+
+  @if (!$isFull && !$alreadyBooked)
+    <form action="{{ route('bookings.store', $event) }}" method="POST" class="mt-3">
+      @csrf
+      <input type="hidden" name="event_id" value="{{ $event->id }}">
+      <button type="submit" class="btn btn-success">Book this event</button>
+    </form>
+  @elseif ($alreadyBooked)
+    <div class="mt-3 text-success">You have already booked this event.</div>
+  @else
+    <div class="mt-3 text-danger">Sorry, this event is full.</div>
+  @endif
+@else
+  <div class="mt-3">
+    <a class="btn btn-outline-secondary" href="{{ route('login') }}">Log in to book</a>
+  </div>
+@endauth
       </div>
       <br />
     </div>

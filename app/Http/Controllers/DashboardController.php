@@ -3,81 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $uid = Auth::id();
+        $organiserId = $request->user()->id;
 
-        // Discover columns from SQLite 
-        $eventCols = collect(DB::select('PRAGMA table_info(events)'))->pluck('name')->toArray();
-
-        // Pick columns safely from known possibilities
-        $titleCol = $this->pickColumn($eventCols, ['title', 'name']);
-        $capCol   = $this->pickColumn($eventCols, ['capacity', 'cap', 'seats', 'total_capacity']);
-        $dateCol  = $this->pickColumn($eventCols, ['date', 'event_date', 'starts_at', 'start_date', 'start_time']);
-        $fkCol    = $this->pickColumn($eventCols, ['user_id', 'organiser_id', 'owner_id', 'creator_id']);
-
-        // Build SELECT list 
-        $selects = [
-            "e.id AS id",
-        ];
-        if ($titleCol) $selects[] = "e.$titleCol AS event_title";
-        if ($capCol)   $selects[] = "COALESCE(e.$capCol, 0) AS total_capacity";
-        if ($dateCol)  $selects[] = "e.$dateCol AS event_date";
-
-        
-        $selectSql = implode(",\n            ", $selects);
-
-        // WHERE 
-        $whereSql = '';
-        $bindings = [];
-        if ($fkCol) {
-            $whereSql = "WHERE e.$fkCol = ?";
-            $bindings[] = $uid;
-        }
-
-        // ORDER BY
-        $orderSql = $dateCol ? "ORDER BY e.$dateCol DESC" : "ORDER BY e.id DESC";
-
-        // RAW SQL 
+        // Raw SQL with whtever is the match to count bookings per event 
         $sql = <<<SQL
             SELECT
-                $selectSql
+                e.id,
+                e.title      AS event_title,
+                e.starts_at  AS event_date,
+                e.capacity   AS total_capacity,
+                (
+                    SELECT COUNT(*) 
+                    FROM bookings bk
+                    WHERE bk.event_id = e.id
+                ) AS current_bookings,
+                (
+                    COALESCE(e.capacity, 0) - (
+                        SELECT COUNT(*) 
+                        FROM bookings bk
+                        WHERE bk.event_id = e.id
+                    )
+                ) AS remaining_spots
             FROM events e
-            $whereSql
-            $orderSql
+            WHERE e.organiser_id = ?
+            ORDER BY e.starts_at DESC
         SQL;
 
-        $report = DB::select($sql, $bindings);
+        $report = DB::select($sql, [$organiserId]);
 
-        // Also show which columns was found 
-        $debug = [
-            'events_columns' => $eventCols,
-            'picked' => [
-                'titleCol' => $titleCol,
-                'capCol'   => $capCol,
-                'dateCol'  => $dateCol,
-                'fkCol'    => $fkCol,
-            ],
-            'sql' => $sql,
-            'bindings' => $bindings,
-        ];
-
-        return view('dashboard', [
-            'report' => $report,
-            'debug'  => $debug,
-        ]);
-    }
-
-    private function pickColumn(array $columns, array $candidates): ?string
-    {
-        foreach ($candidates as $c) {
-            if (in_array($c, $columns, true)) return $c;
-        }
-        return null;
+        return view('dashboard', ['report' => $report]);
     }
 }

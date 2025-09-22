@@ -2,22 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    use HasFactory;
+    // this allows mass assignment for these colums when calling booking::create [], my controller uses create [] so both can be filled 
+    protected $fillable = ['user_id', 'event_id'];
 
-    protected $fillable = ['event_id', 'user_id'];
-
+    // each booking belongs to one event. this needs a event_id FK col on the bookings table 
     public function event()
     {
         return $this->belongsTo(Event::class);
     }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    public function bookings()
+{
+    return $this->hasMany(\App\Models\Booking::class);
+}
 }
