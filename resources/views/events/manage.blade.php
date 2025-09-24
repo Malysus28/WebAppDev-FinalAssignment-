@@ -12,7 +12,7 @@
   <main class="container py-4">
     <h1 class="mb-4">Manage Events</h1>
 
-    {{-- Flash --}}
+    
     @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
     @if(session('error'))   <div class="alert alert-danger">{{ session('error') }}</div> @endif
     @if($errors->any())
@@ -23,7 +23,7 @@
       </div>
     @endif
 
-    {{-- Create new event --}}
+   {{-- make a new event in ev manager --}}
     <div class="card mb-4">
       <div class="card-header fw-semibold">Create New Event</div>
       <div class="card-body">
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    {{-- Existing events --}}
+    {{-- existing + if an event is not there --}}
     <div class="card">
       <div class="card-header fw-semibold">Your Events</div>
       <div class="card-body p-0">

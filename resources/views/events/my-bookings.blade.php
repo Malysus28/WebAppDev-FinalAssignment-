@@ -17,6 +17,7 @@
   <div class="container my-4" style="max-width: 900px;">
     <h1 class="h4 mb-4">My Bookings</h1>
 
+ {{-- sucess//error --}}
     @if (session('success'))
       <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -27,6 +28,7 @@
       <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
 
+    {{-- my table card for displaying information --}}
     <div class="card shadow-sm">
       <div class="card-body p-0">
         <div class="table-responsive">
@@ -40,11 +42,14 @@
               </tr>
             </thead>
             <tbody>
+                {{-- passing bookings from my controller to the view and each booking belongs to an event 
+                    and they all have a date and check if the start date exists --}}
               @forelse ($bookings as $booking)
                 @php
                   $ev = $booking->event;
                   $hasDate = $ev && $ev->starts_at;
-                  // If Event::$casts has starts_at => 'datetime', this is Carbon. Fallback parse otherwise.
+                  
+                  
                   $dateObj = $hasDate
                     ? ( $ev->starts_at instanceof \Carbon\Carbon ? $ev->starts_at : \Carbon\Carbon::parse($ev->starts_at) )
                     : null;

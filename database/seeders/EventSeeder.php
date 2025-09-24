@@ -16,12 +16,12 @@ class EventSeeder extends Seeder
     {
         // Make sure organisers exist
         $organiser1 = User::firstOrCreate(
-            ['email' => 'organiser1@example.com'],
+            ['email' => 'organiser1@gmail.com'],
             ['name' => 'Organiser One', 'password' => bcrypt('password'), 'type' => User::TYPE_ORGANISER]
         );
 
         $organiser2 = User::firstOrCreate(
-            ['email' => 'organiser2@example.com'],
+            ['email' => 'organiser2@gmail.com'],
             ['name' => 'Organiser Two', 'password' => bcrypt('password'), 'type' => User::TYPE_ORGANISER]
         );
 

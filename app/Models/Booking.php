@@ -11,9 +11,7 @@ class Booking extends Model
 
     // each booking belongs to one event. this needs a event_id FK col on the bookings table 
     public function event()
-    {
-        return $this->belongsTo(Event::class);
-    }
+    {return $this->belongsTo(Event::class);}
     public function bookings()
 {
     return $this->hasMany(\App\Models\Booking::class);
