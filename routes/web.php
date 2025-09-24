@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 
 use App\Http\Controllers\DashboardController;
@@ -12,16 +11,11 @@ Route::get('/events/{event}', [EventController::class, 'show'])->name('events.sh
 Route::view('/privacy-policy', 'privacy')->name('privacy');
 Route::view('/terms', 'terms')->name('terms');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::middleware('auth')->group(function () {
     // profile 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 // booking attendees 
      Route::post('/events/{event}/book', [BookingController::class, 'store'])->name('bookings.store');
