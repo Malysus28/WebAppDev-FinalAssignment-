@@ -14,22 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name'=>'Australian Computer Society (ACS)',
-            'email'=>'organiser1@gmail.com',
-            'password'=>Hash::make('password'),
-            'type'=>User::TYPE_ORGANISER,
-        ]);
-            User::create([
-            'name' => 'Australian Signals Directorate (ASD)',
-            'email' => 'organiser2@gmail.com',
-            'password' => Hash::make('password'),
-            'type' => User::TYPE_ORGANISER,
-        ]);
-
                 User::create([
-            'name' => 'Attendee1',
-            'email' => 'attendee1@gmail.com',
+            'name' => 'Malees',
+            'email' => 'malees@gmail.com',
             'password' => Hash::make('password'),
             'type' => User::TYPE_ATTENDEE,
         ]);

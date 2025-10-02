@@ -48,5 +48,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/events/{event}/book', [\App\Http\Controllers\BookingController::class, 'store'])
         ->name('bookings.store');
 });
-
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
 require __DIR__.'/auth.php';

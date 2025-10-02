@@ -16,13 +16,13 @@ class EventSeeder extends Seeder
     {
         // Make sure organisers exist
         $organiser1 = User::firstOrCreate(
-            ['email' => 'organiser1@gmail.com'],
-            ['name' => 'Organiser One', 'password' => bcrypt('password'), 'type' => User::TYPE_ORGANISER]
+            ['email' => 'acsorganiser@gmail.com'],
+            ['name' => 'Australian Computer Society (ACS)', 'password' => bcrypt('password'), 'type' => User::TYPE_ORGANISER]
         );
 
         $organiser2 = User::firstOrCreate(
-            ['email' => 'organiser2@gmail.com'],
-            ['name' => 'Organiser Two', 'password' => bcrypt('password'), 'type' => User::TYPE_ORGANISER]
+            ['email' => 'mentororganiser@gmail.com'],
+            ['name' => 'Mentors', 'password' => bcrypt('password'), 'type' => User::TYPE_ORGANISER]
         );
 
         // Clear existing events
@@ -36,6 +36,7 @@ class EventSeeder extends Seeder
                 'starts_at'    => Carbon::parse('2025-09-15 09:00:00'),
                 'location'     => 'Brisbane Convention Centre',
                 'capacity'     => 150,
+                'categories'   => ['Tech', 'Education'],
             ],
             [
                 'organiser_id' => $organiser1->id,
@@ -44,22 +45,25 @@ class EventSeeder extends Seeder
                 'starts_at'    => Carbon::parse('2025-09-18 10:30:00'),
                 'location'     => 'Griffith University, Nathan Campus',
                 'capacity'     => 50,
+                'categories'   => ['Tech', 'Education'],
             ],
             [
-                'organiser_id' => $organiser2->id,
+                'organiser_id' => $organiser1->id,
                 'title'        => 'Cybersecurity Essentials Workshop',
                 'description'  => 'Learn about modern cybersecurity practices.',
                 'starts_at'    => Carbon::parse('2025-09-20 14:00:00'),
                 'location'     => 'Gold Coast Tech Hub',
                 'capacity'     => 40,
+                'categories'   => ['Tech'],
             ],
             [
-                'organiser_id' => $organiser2->id,
+                'organiser_id' => $organiser1->id,
                 'title'        => 'Women in Tech Networking Night',
                 'description'  => 'An evening dedicated to empowering women in technology.',
                 'starts_at'    => Carbon::parse('2025-09-25 18:00:00'),
                 'location'     => 'South Bank, Brisbane',
                 'capacity'     => 80,
+                'categories'   => ['Tech'],
             ],
             [
                 'organiser_id' => $organiser1->id,
@@ -68,6 +72,7 @@ class EventSeeder extends Seeder
                 'starts_at'    => Carbon::parse('2025-10-05 09:30:00'),
                 'location'     => 'Queensland University of Technology (QUT)',
                 'capacity'     => 120,
+                'categories'   => ['Tech'],
             ],
             [
                 'organiser_id' => $organiser2->id,
@@ -76,6 +81,7 @@ class EventSeeder extends Seeder
                 'starts_at'    => Carbon::parse('2025-10-10 17:00:00'),
                 'location'     => 'Brisbane City Hall',
                 'capacity'     => 100,
+                'categories'   => ['Tech'],
             ],
             [
                 'organiser_id' => $organiser1->id,
@@ -84,14 +90,16 @@ class EventSeeder extends Seeder
                 'starts_at'    => Carbon::parse('2025-10-15 11:00:00'),
                 'location'     => 'University of Queensland (UQ)',
                 'capacity'     => 70,
+                'categories'   => ['Tech'],
             ],
             [
-                'organiser_id' => $organiser2->id,
+                'organiser_id' => $organiser1->id,
                 'title'        => 'Blockchain & Cryptocurrency Seminar',
                 'description'  => 'Understanding blockchain technology and its applications.',
                 'starts_at'    => Carbon::parse('2025-10-20 13:00:00'),
                 'location'     => 'Griffith University, South Bank Campus',
                 'capacity'     => 60,
+                'categories'   => ['Tech'],
             ],
             [
                 'organiser_id' => $organiser1->id,
@@ -100,14 +108,70 @@ class EventSeeder extends Seeder
                 'starts_at'    => Carbon::parse('2025-10-25 10:00:00'),
                 'location'     => 'Brisbane Exhibition Centre',
                 'capacity'     => 90,
+                'categories'   => ['Tech'],
             ],
             [
-                'organiser_id' => $organiser2->id,
+                'organiser_id' => $organiser1->id,
                 'title'        => 'Mobile App Development Workshop',
                 'description'  => 'Learn how to create mobile applications from scratch.',
                 'starts_at'    => Carbon::parse('2025-11-01 09:00:00'),
                 'location'     => 'Gold Coast Tech Hub',
                 'capacity'     => 30,
+                'categories'   => ['Tech'],
+            ],
+            [
+                'organiser_id' => $organiser2->id,
+                'title'        => 'Street Food Festival',
+                'description'  => 'Taste and celebrate multicultural food from around the world.',
+                'starts_at'    => Carbon::parse('2025-09-20 14:00:00'),
+                'location'     => 'Gold Coast Parklands',
+                'capacity'     => 200,
+                'categories'   => ['Food'],
+            ],
+            [
+                'organiser_id' => $organiser2->id,
+                'title'        => 'Wine & Cheese Night',
+                'description'  => 'An evening of gourmet food and wine tasting with mentors.',
+                'starts_at'    => Carbon::parse('2025-09-25 18:00:00'),
+                'location'     => 'South Bank, Brisbane',
+                'capacity'     => 80,
+                'categories'   => ['Food'],
+            ],
+            [
+                'organiser_id' => $organiser2->id,
+                'title'        => 'Startup Pitch Night',
+                'description'  => 'Mentors support local startups pitching to investors.',
+                'starts_at'    => Carbon::parse('2025-10-10 17:00:00'),
+                'location'     => 'Brisbane City Hall',
+                'capacity'     => 100,
+                'categories'   => ['Art', 'Education'],
+            ],
+            [
+                'organiser_id' => $organiser2->id,
+                'title'        => 'Farm-to-Table Cooking Workshop',
+                'description'  => 'Learn to cook meals using fresh local produce with guidance from mentors.',
+                'starts_at'    => Carbon::parse('2025-10-15 11:00:00'),
+                'location'     => 'University of Queensland (UQ)',
+                'capacity'     => 50,
+                'categories'   => ['Food', 'Education'],
+            ],
+            [
+                'organiser_id' => $organiser2->id,
+                'title'        => 'Gourmet Dessert Expo',
+                'description'  => 'Discover and taste unique desserts by local chefs.',
+                'starts_at'    => Carbon::parse('2025-10-25 10:00:00'),
+                'location'     => 'Brisbane Exhibition Centre',
+                'capacity'     => 90,
+                'categories'   => ['Food', 'Art'],
+            ],
+            [
+                'organiser_id' => $organiser2->id,
+                'title'        => 'Mentor & Mentee Social BBQ',
+                'description'  => 'Casual networking BBQ for mentors and mentees.',
+                'starts_at'    => Carbon::parse('2025-11-01 12:00:00'),
+                'location'     => 'Gold Coast Tech Hub',
+                'capacity'     => 100,
+                'categories'   => ['Food', 'Sports'],
             ],
         ];
 

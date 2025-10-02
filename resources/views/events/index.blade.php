@@ -13,15 +13,35 @@
     crossorigin="anonymous"
   />
   <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
 </head>
+
 <body>
     @include('navbar')
   <div class="container py-4">
 
     <h1 class="display-6 mb-3">Upcoming Events</h1>
 
+    <!-- dropdown categories -->
+     @if(isset($allCategories))
+<form method="GET" class="mb-3 d-flex align-items-center gap-2">
+  <label for="category" class="col-form-label">Filter:</label>
+  <select id="category" name="category" class="form-select" style="max-width: 220px;">
+    <option value="">All</option>
+    @foreach ($allCategories as $cat)
+      <option value="{{ $cat }}" {{ (isset($category) && $category === $cat) ? 'selected' : '' }}>
+        {{ $cat }}
+      </option>
+    @endforeach
+  </select>
+  <button class="btn btn-primary btn-sm">Apply</button>
+  @if(request('category'))
+    <a class="btn btn-outline-secondary btn-sm" href="{{ route('events.index') }}">Clear</a>
+  @endif
+</form>
+@endif
+
     <div class="row g-3">
+      <!-- for loop that displays the events -->
       @forelse ($events as $event)
         @php $available = max(0, $event->capacity - $event->bookings_count); @endphp
 
@@ -37,20 +57,39 @@
               <div class="text-muted small"><span class="fw-bold">When:</span> {{ $event->starts_at->format('D, d M Y h:i A') }}</div>
               <div class="text-muted small"><span class="fw-bold">Where:</span>  {{ $event->location }}</div>
               <div class="text-muted small"><span class="fw-bold">Organiser:</span> {{ $event->organiser?->name ?? 'Unknown' }}</div>
-
               <div class="text-muted small mt-2">
                 <span class="fw-bold">Capacity:</span> {{ $event->capacity }} · Booked: {{ $event->bookings_count }} · Available: {{ $available }}
               </div>
 
-              {{-- Push the button to the bottom --}}
+         <!-- categories -->
+         @if (!empty($event->categories))
+         <div class="mt-2">
+            @foreach ($event->categories as $cat)
+              <a href="{{ route('events.index', ['category' => $cat]) }}"
+               class="badge bg-primary text-decoration-none me-1">{{ $cat }}</a>
+                @endforeach
+               </div>
+               @endif
+              
+
+              <!--  view details button   -->
               <div class="mt-auto pt-2">
-                <a class="btn btn-outline-success info btn-sm w-100" href="{{ route('events.show', $event) }}" >
+                <a class="btn btn-outline-primary info btn-sm w-100" href="{{ route('events.show', $event) }}" >
                   View details
                 </a>
               </div>
+
+              <!-- book this btn -->
+              <form action="{{ route('bookings.store', $event) }}" method="POST" class="mt-2">
+                 @csrf
+                  <input type="hidden" name="event_id" value="{{ $event->id }}">
+                   <button type="submit" class="btn btn-outline-success btn-sm w-100"> Book this event </button>
+                  </form>
             </div>
           </div>
         </div>
+
+        <!-- when there is no upcoming events -->
       @empty
         <div class="col-12">
           <div class="alert alert-info">No upcoming events yet.</div>
@@ -58,6 +97,7 @@
       @endforelse
     </div>
 
+    <!-- paginator display section -->
     <div class="mt-4">
       {{-- Bootstrap-styled paginator --}}
       {{ $events->links('pagination::bootstrap-5') }}

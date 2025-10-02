@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    public const CATEGORIES = [
+    'Music', 'Food', 'Tech', 'Sports', 'Art', 'Education'
+];
     use HasFactory;
     protected $fillable=[
         'organiser_id',
@@ -14,9 +17,11 @@ class Event extends Model
         'starts_at',
         'location',
         'capacity',
+        'categories',
     ];
 protected $casts=[
     'starts_at'=>'datetime',
+    'categories' => 'array',
 ];
 // reltaionships, event that can belong to an organiser
 public function organiser(){
@@ -32,5 +37,7 @@ public function bookings(){
 public function scopeUpcoming($query){
     return $query->where('starts_at','>',now())->orderby('starts_at');
 }
+
+// test 1 
 
 }

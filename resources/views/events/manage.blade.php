@@ -64,6 +64,29 @@
             @error('capacity')<div class="invalid-feedback">{{ $message }}</div>@enderror
           </div>
 
+
+          @php
+  // Use the constant from your model so you don't have to pass it from the controller
+  $allCategories = \App\Models\Event::CATEGORIES;
+  $selected = old('categories', []);
+@endphp
+
+<div class="col-12">
+  <label class="form-label fw-semibold">Categories</label>
+  <div class="d-flex flex-wrap gap-3">
+    @foreach ($allCategories as $cat)
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox"
+               name="categories[]" id="cat_{{ $cat }}" value="{{ $cat }}"
+               {{ in_array($cat, $selected, true) ? 'checked' : '' }}>
+        <label class="form-check-label" for="cat_{{ $cat }}">{{ $cat }}</label>
+      </div>
+    @endforeach
+  </div>
+  @error('categories')   <div class="text-danger small">{{ $message }}</div> @enderror
+  @error('categories.*') <div class="text-danger small">{{ $message }}</div> @enderror
+</div>
+
           <div class="col-12">
             <button class="btn btn-primary">Create Event</button>
           </div>

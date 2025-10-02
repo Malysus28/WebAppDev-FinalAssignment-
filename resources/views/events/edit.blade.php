@@ -57,6 +57,28 @@
         @error('capacity')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
+@php
+  $selected = old('categories', $event->categories ?? []);
+@endphp
+
+<div class="mb-3">
+  <label class="form-label fw-semibold">Categories</label>
+  <div class="d-flex flex-wrap gap-3">
+    @foreach (($allCategories ?? []) as $cat)
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="categories[]"
+               id="cat_{{ $cat }}" value="{{ $cat }}"
+               {{ in_array($cat, $selected ?? [], true) ? 'checked' : '' }}>
+        <label class="form-check-label" for="cat_{{ $cat }}">{{ $cat }}</label>
+      </div>
+    @endforeach
+  </div>
+  @error('categories') <div class="text-danger small">{{ $message }}</div> @enderror
+  @error('categories.*') <div class="text-danger small">{{ $message }}</div> @enderror
+</div>
+
+
+
       <div class="col-12 d-flex gap-2">
         <button class="btn btn-primary">Save changes</button>
         <a href="{{ route('organiser.events.manage') }}" class="btn btn-outline-secondary">Cancel</a>
